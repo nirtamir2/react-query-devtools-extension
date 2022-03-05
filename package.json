@@ -3,19 +3,59 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "dev": "vite",
+    "format": "prettier **/* --write --ignore-unknown",
+    "lint": "pnpm lint-js && pnpm lint-style",
+    "lint-js": "eslint --fix src/**/*.{ts,tsx}",
+    "lint-style": "stylelint --fix **/*.css",
+    "prepare": "husky install",
+    "preview": "vite preview",
+    "type-check": "tsc"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,md}": "eslint --cache --fix",
+    "*.{ts,tsx,css,html,md,mdx,svg}": "prettier --write"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "dependencies": {
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-query": "^3.34.16"
   },
   "devDependencies": {
-    "@types/react": "^17.0.33",
-    "@types/react-dom": "^17.0.10",
-    "@vitejs/plugin-react": "^1.0.7",
-    "typescript": "^4.5.4",
-    "vite": "^2.8.0"
+    "@nirtamir2/prettier-plugin-css-order": "^0.0.1",
+    "@trivago/prettier-plugin-sort-imports": "^3.2.0",
+    "@tsconfig/strictest": "^1.0.0",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.13",
+    "@vitejs/plugin-react": "^1.2.0",
+    "eslint": "^8.10.0",
+    "eslint-config-nirtamir2": "^0.0.24",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.4",
+    "prettier": "^2.5.1",
+    "prettier-plugin-packagejson": "^2.2.15",
+    "rollup-plugin-chrome-extension": "^4.0.1-16",
+    "stylelint": "^14.5.3",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-standard": "^25.0.0",
+    "typescript": "^4.6.2",
+    "vite": "^2.8.6"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "pnpm": ">=6.24.0"
   }
 }
