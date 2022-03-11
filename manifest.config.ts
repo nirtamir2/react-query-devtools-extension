@@ -6,6 +6,7 @@ export const manifest = defineManifest({
   version: "1.0.0",
   devtools_page: "devtools-page.html",
   icons: {
+    // @see https://github.com/extend-chrome/rollup-plugin-chrome-extension/issues/226
     16: "assets/images/logo-16.png",
     32: "assets/images/logo-32.png",
     64: "assets/images/logo-64.png",
