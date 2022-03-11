@@ -1,38 +1,29 @@
 {
   "name": "react-query-devtools-extension",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "scripts": {
     "build": "tsc && vite build",
     "dev": "vite",
     "format": "prettier **/* --write --ignore-unknown",
     "lint": "pnpm lint-js && pnpm lint-style",
-    "lint-js": "eslint --fix src/**/*.{ts,tsx}",
+    "lint-js": "eslint --fix **/*.{ts,tsx}",
     "lint-style": "stylelint --fix **/*.css",
     "prepare": "husky install",
     "preview": "vite preview",
+    "start:chromium": "web-ext run --source-dir ./dist --target=chromium",
+    "start:firefox": "web-ext run --source-dir ./dist --target=firefox-desktop",
     "type-check": "tsc"
   },
   "lint-staged": {
     "*.{ts,tsx,md}": "eslint --cache --fix",
     "*.{ts,tsx,css,html,md,mdx,svg}": "prettier --write"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "dependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-query": "^3.34.16"
+    "react-query": "^3.34.16",
+    "webextension-polyfill": "^0.8.0"
   },
   "devDependencies": {
     "@nirtamir2/prettier-plugin-css-order": "^0.0.1",
@@ -40,6 +31,7 @@
     "@tsconfig/strictest": "^1.0.0",
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.13",
+    "@types/webextension-polyfill": "^0.8.2",
     "@vitejs/plugin-react": "^1.2.0",
     "eslint": "^8.10.0",
     "eslint-config-nirtamir2": "^0.0.24",
@@ -52,7 +44,9 @@
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-standard": "^25.0.0",
     "typescript": "^4.6.2",
-    "vite": "^2.8.6"
+    "vite": "^2.8.6",
+    "web-ext": "^6.7.0",
+    "webext-bridge": "^5.0.3"
   },
   "engines": {
     "node": ">=14.0.0",

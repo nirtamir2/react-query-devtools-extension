@@ -10,6 +10,9 @@ module.exports = {
     "nirtamir2/security",
     "nirtamir2/compat",
   ],
+  rules: {
+    "no-console": "off",
+  },
   overrides: [
     {
       files: "vite.config.ts",
