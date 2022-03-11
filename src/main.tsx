@@ -8,7 +8,7 @@ async function createPanel() {
   const url = "/devtools-panel.html";
   const { onShown } = await Browser.devtools.panels.create(
     "React Query",
-    "",
+    "assets/images/logo-32.png",
     url
   );
 
