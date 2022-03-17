@@ -18,9 +18,9 @@ async function renderRenderDevtools(panelWindow: Window) {
    * TODO: use contentScript to get the queryClient data and send it via background script
    */
 
-    // const a = await inspectedWindow.eval(
-    //   "window.queryClient.getQueryCache().findAll().map(a => a.queryKey)"
-    // );
+  // const a = await inspectedWindow.eval(
+  //   "window.queryClient.getQueryCache().findAll().map(a => a.queryKey)"
+  // );
 
   // https://developer.chrome.com/docs/extensions/mv3/devtools/
   // const inspectedWindowTabId = inspectedWindow.tabId;
@@ -41,13 +41,16 @@ async function renderRenderDevtools(panelWindow: Window) {
   // });
 
   console.log("Browser.devtools.inspectedWindow", inspectedWindow);
-  console.log("window", panelWindow);
+
   const { queryClient } = inspectedWindow;
+
+  console.log("queryClient", queryClient);
+
   ReactDOM.render(
     <React.StrictMode>
       {queryClient ? <App queryClient={queryClient} /> : "NOT FOUNT"}
     </React.StrictMode>,
-    document.querySelector("#root")
+    panelWindow.document.querySelector("#root")
   );
 }
 
