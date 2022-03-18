@@ -6,7 +6,7 @@ import { App } from "./App";
 
 async function renderRenderDevtools(panelWindow: Window) {
   const inspectedWindow = Browser.devtools
-    .inspectedWindow as unknown as typeof Browser.devtools & {
+      .inspectedWindow as unknown as typeof Browser.devtools & {
     queryClient?: QueryClient;
   };
   /**
@@ -47,18 +47,18 @@ async function renderRenderDevtools(panelWindow: Window) {
   console.log("queryClient", queryClient);
 
   ReactDOM.render(
-    <React.StrictMode>
-      {queryClient ? <App queryClient={queryClient} /> : "NOT FOUNT"}
-    </React.StrictMode>,
-    panelWindow.document.querySelector("#root")
+      <React.StrictMode>
+        {queryClient ? <App queryClient={queryClient} /> : "NOT FOUNT"}
+      </React.StrictMode>,
+      panelWindow.document.querySelector("#root")
   );
 }
 
 async function createPanel() {
   const { onShown } = await Browser.devtools.panels.create(
-    "React Query",
-    "assets/images/logo-32.png",
-    "/devtools-panel.html"
+      "React Query",
+      "assets/images/logo-32.png",
+      "/devtools-panel.html"
   );
 
   onShown.addListener((window) => {
