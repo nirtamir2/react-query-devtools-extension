@@ -34,7 +34,8 @@ window.addEventListener(
     }
     if (event.data.type === MessageSource.USER_LAND_SCRIPT) {
       console.log("Content script received: ", event.data.data);
-      port.postMessage({
+
+       void Browser.runtime.sendMessage({
         type: MessageSource.CONTENT_SCRIPT,
         data: event.data.data as unknown as Array<IQueryCacheItem>,
       });
