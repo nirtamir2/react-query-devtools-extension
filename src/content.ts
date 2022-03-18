@@ -1,5 +1,6 @@
+import type { QueryState } from "react-query/types/core/query";
 import Browser from "webextension-polyfill";
-import {MessageSource} from "./MessageSource";
+import { MessageSource } from "./MessageSource";
 
 console.log("content");
 
@@ -15,16 +16,28 @@ console.log("content");
 
 const port = Browser.runtime.connect();
 
+export interface IQueryCacheItem {
+  queryHash: string;
+  isFetching: boolean;
+  observersCount: number;
+  state: QueryState;
+  isStale: boolean;
+  isActive: boolean;
+}
+
 window.addEventListener(
   "message",
   (event) => {
     if (!event || event.source !== window || typeof event.data !== "object") {
-        console.log("FAIL",);
+      console.log("FAIL");
       return;
     }
     if (event.data.type === MessageSource.USER_LAND_SCRIPT) {
-      console.log("Content script received: " + event.data.text);
-      port.postMessage(event.data.text);
+      console.log("Content script received: ", event.data.data);
+      port.postMessage({
+        type: MessageSource.CONTENT_SCRIPT,
+        data: event.data.data as unknown as Array<IQueryCacheItem>,
+      });
     }
   },
   false
