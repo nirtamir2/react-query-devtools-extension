@@ -39,7 +39,7 @@ async function createPanel() {
   );
 
   onShown.addListener((window) => {
-    connectToBackground();
+    // connectToBackground();
     renderRenderDevtools(window);
   });
 }
