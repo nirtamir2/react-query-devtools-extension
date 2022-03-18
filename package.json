@@ -11,8 +11,8 @@
     "lint-style": "stylelint --fix **/*.css",
     "prepare": "husky install",
     "preview": "vite preview",
-    "start:chromium": "web-ext run --source-dir ./dist --target=chromium",
-    "start:firefox": "web-ext run --source-dir ./dist --target=firefox-desktop",
+    "start:chromium": "web-ext run --start-url http://localhost:3001 --source-dir ./dist --target=chromium",
+    "start:firefox": "web-ext run --start-url http://localhost:3001 --source-dir ./dist --target=firefox-desktop",
     "type-check": "tsc"
   },
   "lint-staged": {
