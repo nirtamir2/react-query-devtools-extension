@@ -1,0 +1,4 @@
+export enum MessageSource {
+  USER_LAND_SCRIPT = "USER_LAND_SCRIPT",
+  DEVTOOLS_PANEL = "DEVTOOLS_PANEL",
+}

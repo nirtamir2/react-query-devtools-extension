@@ -1,22 +1,7 @@
-// import Browser from "webextension-polyfill";
-// import html from "./src/devtools.html";
-//
-// console.log("Browser.runtime.getURL(html);", Browser.runtime.getURL(html));
-//
-// export {};
-import type { QueryClient } from "react-query";
 import Browser from "webextension-polyfill";
-// import mainWorld from "./main-world-script.ts?script";
+import {MessageSource} from "./MessageSource";
 
 console.log("content");
-
-// @ts-expect-error - this is unsafe to get the user's queryClient
-const queryClient = window.queryClient as QueryClient | undefined;
-if (queryClient) {
-  console.log("content", queryClient);
-} else {
-  console.log("NOT FOUNT", queryClient);
-}
 
 // content-script.ts
 // const src = Browser.runtime.getURL(mainWorld as string);
@@ -33,14 +18,11 @@ const port = Browser.runtime.connect();
 window.addEventListener(
   "message",
   (event) => {
-    // We only accept messages from ourselves
-    console.log("event caught in content script", event);
-
-    if (event.source != window) {
+    if (!event || event.source !== window || typeof event.data !== "object") {
+        console.log("FAIL",);
       return;
     }
-
-    if (event.data.type && event.data.type == "FROM_PAGE") {
+    if (event.data.type === MessageSource.USER_LAND_SCRIPT) {
       console.log("Content script received: " + event.data.text);
       port.postMessage(event.data.text);
     }

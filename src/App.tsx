@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-import type { QueryClient } from "react-query";
 import "./App.css";
 import { ReactQueryDevtoolsPanel } from "./devtools";
 
@@ -7,16 +5,12 @@ function noop() {
   // Do nothing
 }
 
-interface IProps {
-  queryClient: QueryClient;
-}
-
-export function App({ queryClient }: IProps) {
+export function App() {
   // const queryCache = queryClient.getQueryCache();
 
   // const [unsortedQueries, setUnsortedQueries] = useState(
-    // Object.values(queryCache.getAll())
-    // []
+  // Object.values(queryCache.getAll())
+  // []
   // );
 
   // React.useEffect(() => {
