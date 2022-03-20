@@ -1,6 +1,6 @@
 import type { QueryState } from "react-query/types/core/query";
 import Browser from "webextension-polyfill";
-import { MessageSource } from "./MessageSource";
+import { MessageSource } from "../../react-query-connect-to-browser-extension/src";
 
 console.log("content");
 

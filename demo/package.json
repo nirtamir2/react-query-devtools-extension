@@ -1,16 +1,17 @@
 {
   "name": "react-query-app-demo",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "dev": "vite",
     "build": "tsc && vite build",
+    "dev": "vite",
     "preview": "vite preview"
   },
   "dependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-query": "^3.34.16"
+    "react-query": "^3.34.16",
+    "react-query-connect-to-browser-extension": "workspace:../react-query-connect-to-browser-extension"
   },
   "devDependencies": {
     "@types/react": "^17.0.33",

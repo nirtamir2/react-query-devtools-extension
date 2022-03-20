@@ -1,0 +1,4 @@
+packages:
+  - "demo"
+  - "extension"
+  - "react-query-connect-to-browser-extension"
