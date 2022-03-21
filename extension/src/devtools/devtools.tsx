@@ -17,8 +17,6 @@ import { defaultTheme as theme, ThemeProvider } from "./theme";
 import useLocalStorage from "./useLocalStorage";
 import { getQueryStatusColor, getQueryStatusLabel } from "./utils";
 
-const noop = () => {};
-
 const getStatusRank = (q: IQueryCacheItem) =>
   q.state.isFetching ? 0 : !q.observersCount ? 3 : q.isStale ? 2 : 1;
 
@@ -126,6 +124,12 @@ export const ReactQueryDevtoolsPanel = React.forwardRef<
         <style
           dangerouslySetInnerHTML={{
             __html: `
+            .ReactQueryDevtoolsPanel {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+            }
+            
             .ReactQueryDevtoolsPanel * {
               scrollbar-color: ${theme.backgroundAlt} ${theme.gray};
             }
