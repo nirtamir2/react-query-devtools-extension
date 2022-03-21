@@ -4,9 +4,7 @@
   "description": "Script that connect your web app to react-query-devtools browser extension",
   "license": "MIT",
   "author": "Nir Tamir <nirtamir2@gmail.com>",
-  "exports": "./dist/index.js",
-  "main": "dist/index.js",
-  "types": "src/index.ts",
+  "main": "src/index.ts",
   "scripts": {
     "build": "tsc"
   },

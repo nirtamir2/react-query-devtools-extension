@@ -1,5 +1,5 @@
 import type { IQueryCacheItem } from "core";
-import { MessageSource } from "core";
+import { WindowMessage } from "core";
 import type { QueryClient } from "react-query";
 
 function sendCacheToContentScript(queryClient: QueryClient): void {
@@ -20,20 +20,44 @@ function sendCacheToContentScript(queryClient: QueryClient): void {
 
   window.postMessage(
     {
-      type: MessageSource.USER_LAND_SCRIPT,
+      type: WindowMessage.USER_LAND_CACHE_CHANGE_TO_CONTENT_SCRIPT,
       cacheData: queryCacheData,
     },
     "*"
   );
 }
 
+let unsubscribe: (() => void) | null = null;
+
 export function connectToDevtools(queryClient: QueryClient) {
-  // TODO: listen to extension open and close and unsubscribe after the open devtools and close devtools happen
-  const unsubscribe = queryClient.getQueryCache().subscribe(() => {
-    sendCacheToContentScript(queryClient);
-  });
+  const subscribe = () => {
+    return queryClient.getQueryCache().subscribe(() => {
+      sendCacheToContentScript(queryClient);
+    });
+  };
 
-  sendCacheToContentScript(queryClient);
+  const handleMessage = (event: MessageEvent) => {
+    if (event.source !== window || typeof event.data !== "object") {
+      return;
+    }
 
-  return unsubscribe;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if (event.data.type === WindowMessage.DEVTOOLS_OPENED_TO_USER_LAND_SCRIPT) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      sendCacheToContentScript(queryClient);
+      unsubscribe = subscribe();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if (event.data.type === WindowMessage.DEVTOOLS_CLOSED_TO_USER_LAND_SCRIPT) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      unsubscribe?.();
+    }
+  };
+
+  window.addEventListener("message", handleMessage);
+
+  return () => {
+    window.removeEventListener("message", handleMessage);
+  };
 }

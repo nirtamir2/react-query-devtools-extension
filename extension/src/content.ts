@@ -1,6 +1,8 @@
 import type { IQueryCacheItem } from "core";
-import { MessageSource } from "core";
-import { sendMessage } from "webext-bridge";
+import { MessageSource, WindowMessage } from "core";
+import { onMessage, sendMessage } from "webext-bridge";
+
+let isDevtoolsOpen = false;
 
 window.addEventListener(
   "message",
@@ -8,13 +10,18 @@ window.addEventListener(
     if (event.source !== window || typeof event.data !== "object") {
       return;
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    if (event.data.type === MessageSource.USER_LAND_SCRIPT) {
+    if (
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      const cacheData = event.data.data as unknown as Array<IQueryCacheItem>;
+      event.data.type ===
+        WindowMessage.USER_LAND_CACHE_CHANGE_TO_CONTENT_SCRIPT &&
+      isDevtoolsOpen
+    ) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const cacheData = event.data
+        .cacheData as unknown as Array<IQueryCacheItem>;
 
       void sendMessage(
-        MessageSource.CONTENT_SCRIPT,
+        MessageSource.USER_LAND_CACHE_CHANGE_TO_BACKGROUND,
         {
           cacheData,
         },
@@ -24,3 +31,23 @@ window.addEventListener(
   },
   false
 );
+
+onMessage(MessageSource.DEVTOOLS_OPENED_TO_CONTENT_SCRIPT, () => {
+  isDevtoolsOpen = true;
+  window.postMessage(
+    {
+      type: WindowMessage.DEVTOOLS_OPENED_TO_USER_LAND_SCRIPT,
+    },
+    "*"
+  );
+});
+
+onMessage(MessageSource.DEVTOOLS_CLOSED_TO_CONTENT_SCRIPT, () => {
+  isDevtoolsOpen = false;
+  window.postMessage(
+    {
+      type: WindowMessage.DEVTOOLS_CLOSED_TO_USER_LAND_SCRIPT,
+    },
+    "*"
+  );
+});

@@ -32,9 +32,12 @@ export function App() {
   >([]);
 
   useEffect(() => {
-    onMessage(MessageSource.BACKGROUND, (message) => {
-      setUnsortedQueries(message.data.cacheData);
-    });
+    onMessage(
+      MessageSource.BACKGROUND_CACHE_CHANGE_TO_DEVTOOLS_APP,
+      (message) => {
+        setUnsortedQueries(message.data.cacheData);
+      }
+    );
   }, [setUnsortedQueries]);
 
   return (
