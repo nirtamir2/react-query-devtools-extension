@@ -32,6 +32,17 @@ importers:
       stylelint-config-standard: 25.0.0_stylelint@14.5.3
       typescript: 4.6.2
 
+  core:
+    specifiers:
+      '@tsconfig/strictest': ^1.0.0
+      react-query: ^3.34.16
+      typescript: ^4.6.2
+    dependencies:
+      react-query: 3.34.16
+    devDependencies:
+      '@tsconfig/strictest': 1.0.0
+      typescript: 4.6.2
+
   demo:
     specifiers:
       '@types/react': ^17.0.33
@@ -62,12 +73,14 @@ importers:
       '@types/react-dom': ^17.0.13
       '@types/webextension-polyfill': ^0.8.2
       '@vitejs/plugin-react': ^1.2.0
+      core: workspace:../core
       match-sorter: ^6.3.1
       prettier: ^2.5.1
       prettier-plugin-packagejson: ^2.2.15
       react: ^17.0.2
       react-dom: ^17.0.2
       react-query: ^3.34.16
+      react-query-connect-to-browser-extension: workspace:../react-query-connect-to-browser-extension
       rollup-plugin-chrome-extension: ^4.0.1-16
       typescript: ^4.6.2
       vite: ^2.8.6
@@ -75,10 +88,12 @@ importers:
       webext-bridge: ^5.0.3
       webextension-polyfill: ^0.8.0
     dependencies:
+      core: link:../core
       match-sorter: 6.3.1
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-query: 3.34.16_react-dom@17.0.2+react@17.0.2
+      react-query-connect-to-browser-extension: link:../react-query-connect-to-browser-extension
       webextension-polyfill: 0.8.0
     devDependencies:
       '@tsconfig/strictest': 1.0.0
@@ -98,8 +113,11 @@ importers:
     specifiers:
       '@tsconfig/strictest': ^1.0.0
       '@types/react': ^17.0.41
+      core: workspace:../core
       react-query: ^3.34.16
       typescript: ^4.6.2
+    dependencies:
+      core: link:../core
     devDependencies:
       '@tsconfig/strictest': 1.0.0
       '@types/react': 17.0.41
@@ -5390,7 +5408,6 @@ packages:
       '@babel/runtime': 7.17.2
       broadcast-channel: 3.7.0
       match-sorter: 6.3.1
-    dev: true
 
   /react-query/3.34.16_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha512-7FvBvjgEM4YQ8nPfmAr+lJfbW95uyW/TVjFoi2GwCkF33/S8ajx45tuPHPFGWs4qYwPy1mzwxD4IQfpUDrefNQ==}

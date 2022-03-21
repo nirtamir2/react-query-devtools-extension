@@ -15,8 +15,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "noPropertyAccessFromIndexSignature": false, // off because we don't have typings to css modules
+    "noPropertyAccessFromIndexSignature": false // off because we don't have typings to css modules
   },
-  "include": ["src", "shim.d.ts"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src"]
 }

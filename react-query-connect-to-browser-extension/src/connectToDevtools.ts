@@ -1,21 +1,13 @@
+import type { IQueryCacheItem } from "core";
+import { MessageSource } from "core";
 import type { QueryClient } from "react-query";
-import type { QueryState } from "react-query/types/core/query";
-import { MessageSource } from "./MessageSource";
-
-interface IQueryCacheItem {
-  queryHash: string;
-  isFetching: boolean;
-  observersCount: number;
-  state: QueryState;
-  isStale: boolean;
-  isActive: boolean;
-}
 
 function sendCacheToContentScript(queryClient: QueryClient): void {
   const queryCacheValues = Object.values(queryClient.getQueryCache().getAll());
   const queryCacheData: Array<IQueryCacheItem> = queryCacheValues.map(
     (data) => {
       return {
+        queryKey: data.queryKey,
         queryHash: data.queryHash,
         isFetching: data.isFetching(),
         isStale: data.isStale(),
@@ -29,7 +21,7 @@ function sendCacheToContentScript(queryClient: QueryClient): void {
   window.postMessage(
     {
       type: MessageSource.USER_LAND_SCRIPT,
-      data: queryCacheData,
+      cacheData: queryCacheData,
     },
     "*"
   );

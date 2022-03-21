@@ -1,5 +1,5 @@
 import React from "react";
-import type { Query } from "react-query";
+import type { IQueryCacheItem } from "core";
 import type { Theme } from "./theme";
 import { useTheme } from "./theme";
 import useMediaQuery from "./useMediaQuery";
@@ -25,22 +25,22 @@ type StyledComponent<T> = T extends "button"
   ? React.HTMLAttributes<HTMLElementTagNameMap[T]>
   : never;
 
-export function getQueryStatusColor(query: Query, theme: Theme) {
+export function getQueryStatusColor(query: IQueryCacheItem, theme: Theme) {
   return query.state.isFetching
     ? theme.active
-    : !query.getObserversCount()
+    : !query.observersCount
     ? theme.gray
-    : query.isStale()
+    : query.isStale
     ? theme.warning
     : theme.success;
 }
 
-export function getQueryStatusLabel(query: Query) {
+export function getQueryStatusLabel(query: IQueryCacheItem) {
   return query.state.isFetching
     ? "fetching"
-    : !query.getObserversCount()
+    : !query.observersCount
     ? "inactive"
-    : query.isStale()
+    : query.isStale
     ? "stale"
     : "fresh";
 }

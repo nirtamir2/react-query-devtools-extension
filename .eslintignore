@@ -1,3 +1,4 @@
 vite.config.ts
 manifest.config.ts
 devtools
+.eslintrc.js

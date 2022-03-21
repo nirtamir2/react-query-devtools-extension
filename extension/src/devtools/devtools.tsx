@@ -1,6 +1,6 @@
 import React from "react";
+import type { IQueryCacheItem } from "core";
 import { matchSorter } from "match-sorter";
-import { Query } from "react-query";
 import Explorer from "./Explorer";
 import Logo from "./Logo";
 import {
@@ -19,10 +19,13 @@ import { getQueryStatusColor, getQueryStatusLabel } from "./utils";
 
 const noop = () => {};
 
-const getStatusRank = (q: Query) =>
-  q.state.isFetching ? 0 : !q.getObserversCount() ? 3 : q.isStale() ? 2 : 1;
+const getStatusRank = (q: IQueryCacheItem) =>
+  q.state.isFetching ? 0 : !q.observersCount ? 3 : q.isStale ? 2 : 1;
 
-const sortFns: Record<string, (a: Query, b: Query) => number> = {
+const sortFns: Record<
+  string,
+  (a: IQueryCacheItem, b: IQueryCacheItem) => number
+> = {
   "Status > Last Updated": (a, b) =>
     getStatusRank(a) === getStatusRank(b)
       ? (sortFns["Last Updated"]?.(a, b) as number)
@@ -35,10 +38,11 @@ const sortFns: Record<string, (a: Query, b: Query) => number> = {
 };
 
 interface IExtensionProps {
-  onInvalidateQueries: (query: Query) => void;
-  onResetQueries: (query: Query) => void;
-  onRemoveQueries: (query: Query) => void;
-  unsortedQueries: Array<Query>;
+  onInvalidateQueries: (query: IQueryCacheItem) => void;
+  onResetQueries: (query: IQueryCacheItem) => void;
+  onRemoveQueries: (query: IQueryCacheItem) => void;
+  onFetch: (query: IQueryCacheItem) => void;
+  unsortedQueries: Array<IQueryCacheItem>;
 }
 
 export const ReactQueryDevtoolsPanel = React.forwardRef<
@@ -49,6 +53,7 @@ export const ReactQueryDevtoolsPanel = React.forwardRef<
     onInvalidateQueries,
     onResetQueries,
     onRemoveQueries,
+    onFetch,
     unsortedQueries,
   } = props;
 
@@ -109,11 +114,6 @@ export const ReactQueryDevtoolsPanel = React.forwardRef<
   const hasInactive = queries.filter(
     (q) => getQueryStatusLabel(q) === "inactive"
   ).length;
-
-  const handleRefetch = () => {
-    const promise = activeQuery?.fetch();
-    promise?.catch(noop);
-  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -273,8 +273,7 @@ export const ReactQueryDevtoolsPanel = React.forwardRef<
             }}
           >
             {queries.map((query, i) => {
-              const isDisabled =
-                query.getObserversCount() > 0 && !query.isActive();
+              const isDisabled = query.observersCount > 0 && !query.isActive;
               return (
                 <div
                   key={query.queryHash || i}
@@ -315,7 +314,7 @@ export const ReactQueryDevtoolsPanel = React.forwardRef<
                           : "white",
                     }}
                   >
-                    {query.getObserversCount()}
+                    {query.observersCount}
                   </div>
                   {isDisabled ? (
                     <div
@@ -407,7 +406,7 @@ export const ReactQueryDevtoolsPanel = React.forwardRef<
                   justifyContent: "space-between",
                 }}
               >
-                Observers: <Code>{activeQuery.getObserversCount()}</Code>
+                Observers: <Code>{activeQuery.observersCount}</Code>
               </div>
               <div
                 style={{
@@ -442,7 +441,7 @@ export const ReactQueryDevtoolsPanel = React.forwardRef<
             >
               <Button
                 type="button"
-                onClick={handleRefetch}
+                onClick={() => onFetch(activeQuery)}
                 disabled={activeQuery.state.isFetching}
                 style={{
                   background: theme.active,

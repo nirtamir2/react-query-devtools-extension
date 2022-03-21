@@ -1,5 +1,10 @@
+import { useEffect } from "react";
+import type { IQueryCacheItem } from "core";
+import { MessageSource } from "core";
+import { onMessage } from "webext-bridge";
 import "./App.css";
 import { ReactQueryDevtoolsPanel } from "./devtools";
+import { useSafeState } from "./devtools/utils";
 
 function noop() {
   // Do nothing
@@ -22,12 +27,24 @@ export function App() {
   //   return unsubscribe;
   // }, [queryCache]);
 
+  const [unsortedQueries, setUnsortedQueries] = useSafeState<
+    Array<IQueryCacheItem>
+  >([]);
+
+  useEffect(() => {
+    onMessage(MessageSource.BACKGROUND, (message) => {
+      console.log("<MESSAGE TO REACT APP>", message);
+      setUnsortedQueries(message.data.cacheData);
+    });
+  }, [setUnsortedQueries]);
+
   return (
     <ReactQueryDevtoolsPanel
-      unsortedQueries={[]}
+      unsortedQueries={unsortedQueries}
       onInvalidateQueries={noop}
       onResetQueries={noop}
       onRemoveQueries={noop}
+      onFetch={noop}
       // unsortedQueries={unsortedQueries}
       // onInvalidateQueries={(query) => {
       //   void queryClient.invalidateQueries(query);
@@ -37,6 +54,9 @@ export function App() {
       // }}
       // onRemoveQueries={(query) => {
       //   queryClient.removeQueries(query);
+      // }}
+      // onFetch={(query) => {
+      //   query.fetch();
       // }}
     />
   );

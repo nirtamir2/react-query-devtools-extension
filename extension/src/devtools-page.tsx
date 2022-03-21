@@ -14,23 +14,6 @@ function renderRenderDevtools(panelWindow: Window) {
   );
 }
 
-function connectToBackground() {
-  // Create a connection to the background page
-  const backgroundPageConnection = Browser.runtime.connect({
-    name: "panel",
-  });
-
-  backgroundPageConnection.postMessage({
-    name: "init",
-    tabId: Browser.devtools.inspectedWindow.tabId,
-  });
-
-  backgroundPageConnection.onMessage.addListener((message) => {
-    console.log("devtools-page#onMessage()", message);
-    //   TODO: keep in state and rerender app
-  });
-}
-
 async function createPanel() {
   const { onShown } = await Browser.devtools.panels.create(
     "React Query",
@@ -39,7 +22,6 @@ async function createPanel() {
   );
 
   onShown.addListener((window) => {
-    // connectToBackground();
     renderRenderDevtools(window);
   });
 }
