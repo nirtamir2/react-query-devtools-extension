@@ -33,7 +33,6 @@ export function App() {
 
   useEffect(() => {
     onMessage(MessageSource.BACKGROUND, (message) => {
-      console.log("<MESSAGE TO REACT APP>", message);
       setUnsortedQueries(message.data.cacheData);
     });
   }, [setUnsortedQueries]);

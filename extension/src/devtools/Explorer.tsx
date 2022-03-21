@@ -1,49 +1,47 @@
 // @ts-nocheck
+import React from "react";
+import { styled } from "./utils";
 
-import React from 'react'
+export const Entry = styled("div", {
+  fontFamily: "Menlo, monospace",
+  fontSize: "1em",
+  lineHeight: "1.7",
+  outline: "none",
+  wordBreak: "break-word",
+});
 
-import { styled } from './utils'
+export const Label = styled("span", {
+  cursor: "pointer",
+  color: "white",
+});
 
-export const Entry = styled('div', {
-  fontFamily: 'Menlo, monospace',
-  fontSize: '1em',
-  lineHeight: '1.7',
-  outline: 'none',
-  wordBreak: 'break-word',
-})
-
-export const Label = styled('span', {
-  cursor: 'pointer',
-  color: 'white',
-})
-
-export const Value = styled('span', (props, theme) => ({
+export const Value = styled("span", (props, theme) => ({
   color: theme.danger,
-}))
+}));
 
-export const SubEntries = styled('div', {
-  marginLeft: '.1em',
-  paddingLeft: '1em',
-  borderLeft: '2px solid rgba(0,0,0,.15)',
-})
+export const SubEntries = styled("div", {
+  marginLeft: ".1em",
+  paddingLeft: "1em",
+  borderLeft: "2px solid rgba(0,0,0,.15)",
+});
 
-export const Info = styled('span', {
-  color: 'grey',
-  fontSize: '.7em',
-})
+export const Info = styled("span", {
+  color: "grey",
+  fontSize: ".7em",
+});
 
-export const Expander = ({ expanded, style = {}, ...rest }) => (
+export const Expander = ({ expanded, style = {} }) => (
   <span
     style={{
-      display: 'inline-block',
-      transition: 'all .1s ease',
-      transform: `rotate(${expanded ? 90 : 0}deg) ${style.transform || ''}`,
+      display: "inline-block",
+      transition: "all .1s ease",
+      transform: `rotate(${expanded ? 90 : 0}deg) ${style.transform || ""}`,
       ...style,
     }}
   >
     ▶
   </span>
-)
+);
 
 const DefaultRenderer = ({
   handleEntry,
@@ -58,23 +56,23 @@ const DefaultRenderer = ({
   toggle,
   pageSize,
 }) => {
-  const [expandedPages, setExpandedPages] = React.useState([])
+  const [expandedPages, setExpandedPages] = React.useState([]);
 
   return (
     <Entry key={label}>
       {subEntryPages?.length ? (
         <>
           <Label onClick={() => toggle()}>
-            <Expander expanded={expanded} /> {label}{' '}
+            <Expander expanded={expanded} /> {label}{" "}
             <Info>
-              {String(type).toLowerCase() === 'iterable' ? '(Iterable) ' : ''}
+              {String(type).toLowerCase() === "iterable" ? "(Iterable) " : ""}
               {subEntries.length} {subEntries.length > 1 ? `items` : `item`}
             </Info>
           </Label>
           {expanded ? (
             subEntryPages.length === 1 ? (
               <SubEntries>
-                {subEntries.map(entry => handleEntry(entry))}
+                {subEntries.map((entry) => handleEntry(entry))}
               </SubEntries>
             ) : (
               <SubEntries>
@@ -83,19 +81,19 @@ const DefaultRenderer = ({
                     <Entry>
                       <Label
                         onClick={() =>
-                          setExpandedPages(old =>
+                          setExpandedPages((old) =>
                             old.includes(index)
-                              ? old.filter(d => d !== index)
+                              ? old.filter((d) => d !== index)
                               : [...old, index]
                           )
                         }
                       >
-                        <Expander expanded={expanded} /> [{index * pageSize} ...{' '}
+                        <Expander expanded={expanded} /> [{index * pageSize} ...{" "}
                         {index * pageSize + pageSize - 1}]
                       </Label>
                       {expandedPages.includes(index) ? (
                         <SubEntries>
-                          {entries.map(entry => handleEntry(entry))}
+                          {entries.map((entry) => handleEntry(entry))}
                         </SubEntries>
                       ) : null}
                     </Entry>
@@ -107,15 +105,15 @@ const DefaultRenderer = ({
         </>
       ) : (
         <>
-          <Label>{label}:</Label>{' '}
+          <Label>{label}:</Label>{" "}
           <Value>
             {JSON.stringify(value, Object.getOwnPropertyNames(Object(value)))}
           </Value>
         </>
       )}
     </Entry>
-  )
-}
+  );
+};
 
 export default function Explorer({
   value,
@@ -125,74 +123,74 @@ export default function Explorer({
   depth = 0,
   ...rest
 }) {
-  const [expanded, setExpanded] = React.useState(defaultExpanded)
+  const [expanded, setExpanded] = React.useState(defaultExpanded);
 
-  const toggle = set => {
-    setExpanded(old => (typeof set !== 'undefined' ? set : !old))
-  }
+  const toggle = (set) => {
+    setExpanded((old) => (typeof set !== "undefined" ? set : !old));
+  };
 
-  const path = []
+  const path = [];
 
-  let type = typeof value
-  let subEntries
-  const subEntryPages = []
+  let type = typeof value;
+  let subEntries;
+  const subEntryPages = [];
 
-  const makeProperty = sub => {
-    const newPath = path.concat(sub.label)
+  const makeProperty = (sub) => {
+    const newPath = path.concat(sub.label);
     const subDefaultExpanded =
       defaultExpanded === true
         ? { [sub.label]: true }
-        : defaultExpanded?.[sub.label]
+        : defaultExpanded?.[sub.label];
     return {
       ...sub,
       path: newPath,
       depth: depth + 1,
       defaultExpanded: subDefaultExpanded,
-    }
-  }
+    };
+  };
 
   if (Array.isArray(value)) {
-    type = 'array'
+    type = "array";
     subEntries = value.map((d, i) =>
       makeProperty({
         label: i,
         value: d,
       })
-    )
+    );
   } else if (
     value !== null &&
-    typeof value === 'object' &&
-    typeof value[Symbol.iterator] === 'function'
+    typeof value === "object" &&
+    typeof value[Symbol.iterator] === "function"
   ) {
-    type = 'Iterable'
+    type = "Iterable";
     subEntries = Array.from(value, (val, i) =>
       makeProperty({
         label: i,
         value: val,
       })
-    )
-  } else if (typeof value === 'object' && value !== null) {
-    type = 'object'
+    );
+  } else if (typeof value === "object" && value !== null) {
+    type = "object";
     // eslint-disable-next-line no-shadow
     subEntries = Object.entries(value).map(([label, value]) =>
       makeProperty({
         label,
         value,
       })
-    )
+    );
   }
 
   if (subEntries) {
-    let i = 0
+    let i = 0;
 
     while (i < subEntries.length) {
-      subEntryPages.push(subEntries.slice(i, i + pageSize))
-      i = i + pageSize
+      subEntryPages.push(subEntries.slice(i, i + pageSize));
+      i = i + pageSize;
     }
   }
 
   return renderer({
-    handleEntry: entry => (
+    handleEntry: (entry) => (
       <Explorer key={entry.label} renderer={renderer} {...rest} {...entry} />
     ),
     type,
@@ -205,5 +203,5 @@ export default function Explorer({
     toggle,
     pageSize,
     ...rest,
-  })
+  });
 }

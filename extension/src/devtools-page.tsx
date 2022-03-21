@@ -4,8 +4,6 @@ import Browser from "webextension-polyfill";
 import { App } from "./App";
 
 function renderRenderDevtools(panelWindow: Window) {
-  console.log("devtools-page#createPanel()");
-
   ReactDOM.render(
     <React.StrictMode>
       <App />

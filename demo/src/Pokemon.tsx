@@ -1,4 +1,3 @@
-import React from "react";
 import type { IPokemonResponse } from "./IPokemonResponse";
 
 interface IProps {

@@ -10,17 +10,4 @@ module.exports = {
     "nirtamir2/security",
     "nirtamir2/compat",
   ],
-  rules: {
-    "no-console": "off",
-    "import/no-unresolved": "off",
-    "@typescript-eslint/no-unsafe-member-access": "off",
-  },
-  overrides: [
-    {
-      files: "vite.config.ts",
-      parserOptions: {
-        project: "./tsconfig.node.json",
-      },
-    },
-  ],
 };

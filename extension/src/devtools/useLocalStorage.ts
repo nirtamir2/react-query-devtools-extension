@@ -1,52 +1,52 @@
-import React from 'react'
+import React from "react";
 
 const getItem = (key: string): unknown => {
   try {
-    const itemValue = localStorage.getItem(key)
-    if (typeof itemValue === 'string') {
-      return JSON.parse(itemValue)
+    const itemValue = localStorage.getItem(key);
+    if (typeof itemValue === "string") {
+      return JSON.parse(itemValue);
     }
-    return undefined
+    return undefined;
   } catch {
-    return undefined
+    return undefined;
   }
-}
+};
 
 export default function useLocalStorage<T>(
   key: string,
   defaultValue: T | undefined
 ): [T | undefined, (newVal: T | ((prevVal: T) => T)) => void] {
-  const [value, setValue] = React.useState<T>()
+  const [value, setValue] = React.useState<T>();
 
   React.useEffect(() => {
-    const initialValue = getItem(key) as T | undefined
+    const initialValue = getItem(key) as T | undefined;
 
-    if (typeof initialValue === 'undefined' || initialValue === null) {
+    if (typeof initialValue === "undefined" || initialValue === null) {
       setValue(
-        typeof defaultValue === 'function' ? defaultValue() : defaultValue
-      )
+        typeof defaultValue === "function" ? defaultValue() : defaultValue
+      );
     } else {
-      setValue(initialValue)
+      setValue(initialValue);
     }
-  }, [defaultValue, key])
+  }, [defaultValue, key]);
 
   const setter = React.useCallback(
-    updater => {
-      setValue(old => {
-        let newVal = updater
+    (updater) => {
+      setValue((old) => {
+        let newVal = updater;
 
-        if (typeof updater == 'function') {
-          newVal = updater(old)
+        if (typeof updater == "function") {
+          newVal = updater(old);
         }
         try {
-          localStorage.setItem(key, JSON.stringify(newVal))
+          localStorage.setItem(key, JSON.stringify(newVal));
         } catch {}
 
-        return newVal
-      })
+        return newVal;
+      });
     },
     [key]
-  )
+  );
 
-  return [value, setter]
+  return [value, setter];
 }

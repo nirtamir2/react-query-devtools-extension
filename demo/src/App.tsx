@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import styles from "./App.module.css";
 import type { IPokemonResponse } from "./IPokemonResponse";

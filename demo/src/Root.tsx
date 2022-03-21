@@ -1,4 +1,3 @@
-import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { connectToDevtools } from "react-query-connect-to-browser-extension";
 import { ReactQueryDevtools } from "react-query/devtools";

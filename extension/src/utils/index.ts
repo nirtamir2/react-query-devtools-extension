@@ -1,1 +1,1 @@
-export * from './TypedObject'
+export * from "./TypedObject";
