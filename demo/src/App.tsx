@@ -1,33 +1,55 @@
-import React, {useState} from "react";
-import {useQuery} from "react-query";
-import "./App.css";
+import React, { useState } from "react";
+import { useQuery } from "react-query";
+import styles from "./App.module.css";
+import type { IPokemonResponse } from "./IPokemonResponse";
+import { Pokemon } from "./Pokemon";
 
 async function getPokemonDataById(id: number) {
   const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-  return (await response.json()) as Promise<{ name: string }>;
+  return (await response.json()) as Promise<IPokemonResponse>;
 }
 
+const POKEMON_FIRST_ID = 1;
+
 function App() {
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(POKEMON_FIRST_ID);
   const { data, isSuccess, isLoading, isError } = useQuery(
     ["pokemon", count],
-    () => getPokemonDataById(count)
+    async () => getPokemonDataById(count)
   );
 
+  function handleFetchNextPokemon() {
+    setCount((count) => count + 1);
+  }
+
+  function handleFetchPrevPokemon() {
+    setCount((count) => Math.max(0, count - 1));
+  }
+
+  const isPrevNavigationDisabled = count === POKEMON_FIRST_ID;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          {isLoading && <p>Loading...</p>}
-          {isSuccess && <p>{data.name}</p>}
-          {isError && <p>Error</p>}
-        </p>
+    <div className={styles.app}>
+      <header className={styles.header}>
+        <button
+          type="button"
+          disabled={isPrevNavigationDisabled}
+          onClick={
+            isPrevNavigationDisabled ? undefined : handleFetchPrevPokemon
+          }
+        >
+          ⬅️
+        </button>
+        <div className={styles.count}>{count}</div>
+        <button type="button" onClick={handleFetchNextPokemon}>
+          ➡️
+        </button>
       </header>
+      <main>
+        {isLoading ? <div>Loading...</div> : null}
+        {isSuccess ? <Pokemon data={data} /> : null}
+        {isError ? <div>Error</div> : null}
+      </main>
     </div>
   );
 }
