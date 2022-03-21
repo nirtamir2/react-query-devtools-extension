@@ -5,13 +5,20 @@ import { sendMessage } from "webext-bridge";
 import Browser from "webextension-polyfill";
 import { App } from "./App";
 
-function renderRenderDevtools(panelWindow: Window) {
+function renderDevtoolsPanel(panelWindow: Window) {
   ReactDOM.render(
     <React.StrictMode>
       <App />
     </React.StrictMode>,
     panelWindow.document.querySelector("#root")
   );
+}
+
+function unmountDevtoolsPage(panelWindow: Window) {
+  const element = panelWindow.document.querySelector("#root");
+  if (element != null) {
+    ReactDOM.unmountComponentAtNode(element);
+  }
 }
 
 async function createPanel() {
@@ -22,7 +29,7 @@ async function createPanel() {
   );
 
   onShown.addListener((window) => {
-    renderRenderDevtools(window);
+    renderDevtoolsPanel(window);
     void sendMessage(
       MessageSource.DEVTOOLS_OPENED_TO_CONTENT_SCRIPT,
       null,
@@ -31,6 +38,7 @@ async function createPanel() {
   });
 
   onHidden.addListener(() => {
+    unmountDevtoolsPage(window);
     void sendMessage(
       MessageSource.DEVTOOLS_CLOSED_TO_CONTENT_SCRIPT,
       null,

@@ -10,5 +10,3 @@ export enum WindowMessage {
   DEVTOOLS_OPENED_TO_USER_LAND_SCRIPT = "DEVTOOLS_OPENED_TO_USER_LAND_SCRIPT",
   DEVTOOLS_CLOSED_TO_USER_LAND_SCRIPT = "DEVTOOLS_CLOSED_TO_USER_LAND_SCRIPT",
 }
-
-export const windowNamespace = "react-query-devtools-extension";

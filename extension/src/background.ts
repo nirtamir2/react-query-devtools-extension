@@ -1,5 +1,5 @@
 import { MessageSource } from "core";
-import { sendMessage, onMessage } from "webext-bridge";
+import { onMessage, sendMessage } from "webext-bridge";
 
 onMessage(
   MessageSource.USER_LAND_CACHE_CHANGE_TO_BACKGROUND,
