@@ -6,6 +6,8 @@
   "author": "Nir Tamir <nirtamir2@gmail.com>",
   "main": "src/index.ts",
   "scripts": {
+    "type-check": "tsc --noEmit",
+    "lint-js": "eslint --fix **/*.ts",
     "build": "tsc"
   },
   "dependencies": {

@@ -5,10 +5,10 @@
   "scripts": {
     "format": "prettier **/* --write --ignore-unknown",
     "lint": "pnpm lint-js && pnpm lint-style",
-    "lint-js": "eslint --fix **/*.{ts,tsx}",
+    "lint-js": "pnpm -r lint-js",
     "lint-style": "stylelint --fix **/*.css",
     "prepare": "husky install",
-    "type-check": "tsc"
+    "type-check": "pnpm -r type-check"
   },
   "lint-staged": {
     "*.{ts,tsx,md}": "eslint --cache --fix",

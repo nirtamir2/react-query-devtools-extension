@@ -1,0 +1,11 @@
+{
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "extends": [
+    "nirtamir2/recommended",
+    "nirtamir2/typescript",
+    "nirtamir2/security",
+    "nirtamir2/compat"
+  ]
+}

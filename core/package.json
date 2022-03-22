@@ -6,7 +6,8 @@
   "author": "Nir Tamir <nirtamir2@gmail.com>",
   "main": "src/index.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "react-query": "^3.34.16"
