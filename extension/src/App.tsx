@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import type { IQueryCacheItem } from "core";
 import { MessageSource } from "core";
-import { onMessage } from "webext-bridge";
+import { onMessage, sendMessage } from "webext-bridge";
+import Browser from "webextension-polyfill";
 import "./App.css";
 import { ReactQueryDevtoolsPanel } from "./devtools";
 import { useSafeState } from "./devtools/utils";
@@ -43,14 +44,19 @@ export function App() {
   return (
     <ReactQueryDevtoolsPanel
       unsortedQueries={unsortedQueries}
-      onInvalidateQueries={noop}
       onResetQueries={noop}
       onRemoveQueries={noop}
       onFetch={noop}
-      // unsortedQueries={unsortedQueries}
-      // onInvalidateQueries={(query) => {
-      //   void queryClient.invalidateQueries(query);
-      // }}
+      onInvalidateQuery={(query) => {
+        void sendMessage(
+          MessageSource.DEVTOOLS_CLICK_INVALIDATE_QUERY_TO_CONTENT_SCRIPT,
+          {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            query,
+          },
+          `content-script@${Browser.devtools.inspectedWindow.tabId}`
+        );
+      }}
       // onResetQueries={(query) => {
       //   void queryClient.resetQueries(query);
       // }}

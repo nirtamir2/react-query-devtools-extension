@@ -10,5 +10,8 @@ declare module "webext-bridge" {
     };
     [MessageSource.DEVTOOLS_OPENED_TO_CONTENT_SCRIPT]: null;
     [MessageSource.DEVTOOLS_CLOSED_TO_CONTENT_SCRIPT]: null;
+    [MessageSource.DEVTOOLS_CLICK_INVALIDATE_QUERY_TO_CONTENT_SCRIPT]: {
+      query: IQueryCacheItem;
+    };
   }
 }

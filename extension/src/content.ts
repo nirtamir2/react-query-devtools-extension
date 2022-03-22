@@ -51,3 +51,16 @@ onMessage(MessageSource.DEVTOOLS_CLOSED_TO_CONTENT_SCRIPT, () => {
     "*"
   );
 });
+
+onMessage(
+  MessageSource.DEVTOOLS_CLICK_INVALIDATE_QUERY_TO_CONTENT_SCRIPT,
+  (message) => {
+    window.postMessage(
+      {
+        type: WindowMessage.DEVTOOLS_CLICK_INVALIDATE_QUERY_TO_USER_LAND_SCRIPT,
+        query: message.data.query,
+      },
+      "*"
+    );
+  }
+);

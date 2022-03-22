@@ -53,6 +53,18 @@ export function connectToDevtools(queryClient: QueryClient) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       unsubscribe?.();
     }
+    if (
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      event.data.type ===
+      WindowMessage.DEVTOOLS_CLICK_INVALIDATE_QUERY_TO_USER_LAND_SCRIPT
+    ) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const query = event.data.query as IQueryCacheItem;
+      void queryClient.invalidateQueries({
+        queryKey: query.queryKey,
+        exact: true,
+      });
+    }
   };
 
   window.addEventListener("message", handleMessage);

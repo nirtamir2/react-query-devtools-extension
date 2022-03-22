@@ -36,7 +36,7 @@ const sortFns: Record<
 };
 
 interface IExtensionProps {
-  onInvalidateQueries: (query: IQueryCacheItem) => void;
+  onInvalidateQuery: (query: IQueryCacheItem) => void;
   onResetQueries: (query: IQueryCacheItem) => void;
   onRemoveQueries: (query: IQueryCacheItem) => void;
   onFetch: (query: IQueryCacheItem) => void;
@@ -48,7 +48,7 @@ export const ReactQueryDevtoolsPanel = React.forwardRef<
   IExtensionProps
 >(function ReactQueryDevtoolsPanel(props, ref): React.ReactElement {
   const {
-    onInvalidateQueries,
+    onInvalidateQuery,
     onResetQueries,
     onRemoveQueries,
     onFetch,
@@ -455,7 +455,7 @@ export const ReactQueryDevtoolsPanel = React.forwardRef<
               </Button>{" "}
               <Button
                 type="button"
-                onClick={() => onInvalidateQueries(activeQuery)}
+                onClick={() => onInvalidateQuery(activeQuery)}
                 style={{
                   background: theme.warning,
                   color: theme.inputTextColor,
