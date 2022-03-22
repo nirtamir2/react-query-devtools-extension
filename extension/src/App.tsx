@@ -1,33 +1,30 @@
 import { useEffect } from "react";
 import type { IQueryCacheItem } from "core";
-import { MessageSource } from "core";
+import { MessageSource, QueryAction } from "core";
 import { onMessage, sendMessage } from "webext-bridge";
 import Browser from "webextension-polyfill";
 import "./App.css";
 import { ReactQueryDevtoolsPanel } from "./devtools";
 import { useSafeState } from "./devtools/utils";
 
-function noop() {
-  // Do nothing
+function sendPerformQueryActionMessageToContentScript({
+  query,
+  action,
+}: {
+  query: IQueryCacheItem;
+  action: QueryAction;
+}) {
+  void sendMessage(
+    MessageSource.DEVTOOLS_PERFORM_QUERY_ACTION_TO_CONTENT_SCRIPT,
+    {
+      query,
+      action,
+    },
+    `content-script@${Browser.devtools.inspectedWindow.tabId}`
+  );
 }
 
 export function App() {
-  // const queryCache = queryClient.getQueryCache();
-
-  // const [unsortedQueries, setUnsortedQueries] = useState(
-  // Object.values(queryCache.getAll())
-  // []
-  // );
-
-  // React.useEffect(() => {
-  //   const unsubscribe = queryCache.subscribe(() => {
-  //     setUnsortedQueries(Object.values(queryCache.getAll()));
-  //   });
-  //   setUnsortedQueries(Object.values(queryCache.getAll()));
-  //
-  //   return unsubscribe;
-  // }, [queryCache]);
-
   const [unsortedQueries, setUnsortedQueries] = useSafeState<
     Array<IQueryCacheItem>
   >([]);
@@ -44,28 +41,30 @@ export function App() {
   return (
     <ReactQueryDevtoolsPanel
       unsortedQueries={unsortedQueries}
-      onResetQueries={noop}
-      onRemoveQueries={noop}
-      onFetch={noop}
-      onInvalidateQuery={(query) => {
-        void sendMessage(
-          MessageSource.DEVTOOLS_CLICK_INVALIDATE_QUERY_TO_CONTENT_SCRIPT,
-          {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            query,
-          },
-          `content-script@${Browser.devtools.inspectedWindow.tabId}`
-        );
+      onResetQuery={(query) => {
+        sendPerformQueryActionMessageToContentScript({
+          query,
+          action: QueryAction.Reset,
+        });
       }}
-      // onResetQueries={(query) => {
-      //   void queryClient.resetQueries(query);
-      // }}
-      // onRemoveQueries={(query) => {
-      //   queryClient.removeQueries(query);
-      // }}
-      // onFetch={(query) => {
-      //   query.fetch();
-      // }}
+      onRemoveQuery={(query) => {
+        sendPerformQueryActionMessageToContentScript({
+          query,
+          action: QueryAction.Remove,
+        });
+      }}
+      onRefetchQuery={(query) => {
+        sendPerformQueryActionMessageToContentScript({
+          query,
+          action: QueryAction.Refetch,
+        });
+      }}
+      onInvalidateQuery={(query) => {
+        sendPerformQueryActionMessageToContentScript({
+          query,
+          action: QueryAction.Invalidate,
+        });
+      }}
     />
   );
 }

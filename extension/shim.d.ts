@@ -1,4 +1,4 @@
-import type { IQueryCacheItem, MessageSource } from "core";
+import type { IQueryCacheItem, MessageSource, QueryAction } from "core";
 
 declare module "webext-bridge" {
   export interface ProtocolMap {
@@ -10,8 +10,9 @@ declare module "webext-bridge" {
     };
     [MessageSource.DEVTOOLS_OPENED_TO_CONTENT_SCRIPT]: null;
     [MessageSource.DEVTOOLS_CLOSED_TO_CONTENT_SCRIPT]: null;
-    [MessageSource.DEVTOOLS_CLICK_INVALIDATE_QUERY_TO_CONTENT_SCRIPT]: {
+    [MessageSource.DEVTOOLS_PERFORM_QUERY_ACTION_TO_CONTENT_SCRIPT]: {
       query: IQueryCacheItem;
+      action: QueryAction;
     };
   }
 }

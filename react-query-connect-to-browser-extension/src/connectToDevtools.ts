@@ -1,5 +1,5 @@
 import type { IQueryCacheItem } from "core";
-import { WindowMessage } from "core";
+import { QueryAction, WindowMessage } from "core";
 import type { QueryClient } from "react-query";
 
 function sendCacheToContentScript(queryClient: QueryClient): void {
@@ -56,14 +56,42 @@ export function connectToDevtools(queryClient: QueryClient) {
     if (
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       event.data.type ===
-      WindowMessage.DEVTOOLS_CLICK_INVALIDATE_QUERY_TO_USER_LAND_SCRIPT
+      WindowMessage.DEVTOOLS_PERFORM_QUERY_ACTION_TO_USER_LAND_SCRIPT
     ) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const query = event.data.query as IQueryCacheItem;
-      void queryClient.invalidateQueries({
-        queryKey: query.queryKey,
-        exact: true,
-      });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const action = event.data.action as QueryAction;
+      switch (action) {
+        case QueryAction.Refetch: {
+          void queryClient.refetchQueries({
+            queryKey: query.queryKey,
+            exact: true,
+          });
+          break;
+        }
+        case QueryAction.Invalidate: {
+          void queryClient.invalidateQueries({
+            queryKey: query.queryKey,
+            exact: true,
+          });
+          break;
+        }
+        case QueryAction.Reset: {
+          void queryClient.resetQueries({
+            queryKey: query.queryKey,
+            exact: true,
+          });
+          break;
+        }
+        case QueryAction.Remove: {
+          queryClient.removeQueries({
+            queryKey: query.queryKey,
+            exact: true,
+          });
+          break;
+        }
+      }
     }
   };
 
