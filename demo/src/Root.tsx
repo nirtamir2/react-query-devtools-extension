@@ -7,15 +7,11 @@ const queryClient = new QueryClient();
 
 connectToDevtools(queryClient);
 
-export function _Root() {
+export function Root() {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools />
       <App />
     </QueryClientProvider>
   );
-}
-
-export function Root() {
-  return <_Root />;
 }
